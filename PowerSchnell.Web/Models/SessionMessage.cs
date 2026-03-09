@@ -22,6 +22,7 @@ namespace PowerSchnell.Web.Models
 
                 default:
                     return ChatMessageRole.User;
+
             }
         }
     }
