@@ -1,0 +1,58 @@
+﻿@model PowerSchnell.Web.Models.IndexViewModel
+<div class="wrap">
+    <div class="fleft">
+        <img src="/Images/powershnell.png" width="400" height="400" />
+        <br />
+        <br />
+        <textarea id="inputString" style="margin-top: 5px; vertical-align: middle; margin-right: 20px; float: left; width: 400px; height: 100px" placeholder="Ask away!" class="form-control" onkeydown="enter()"></textarea>
+        <button style="maring-top: 5px" id="btn_request" name="btn_request" class="btn btn-flat btn-lg btn-success" onclick="fetchData()">Shnell me</button><br />
+        <button style="margin-top: 10px;" id="btn_request" name="btn_reset" class="btn btn-flat btn-lg btn-outline-success" onclick="reset()">Reset</button>
+        <div class="lds-ripple" id="lds-ripple"><div></div><div></div></div>
+    </div>
+    <div class="fright">
+        <div class="scrollable-div" style="overflow-y: auto;" id="responseDiv">
+    </div>
+</div>
+<script>
+    function enter() {
+            if (event.key === 'Enter') {
+                fetchData(); // Call your fetchData() function here
+            }
+    }
+    function fetchData() {
+        var inputString = $('#inputString').val();
+            $('#lds-ripple').toggle();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/SendRequest',
+            data: { input: inputString },
+            success: function (data) {
+                $('#responseDiv').html(data);
+                    $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
+                $('#inputString').val('') ;
+                    $('#lds-ripple').toggle();
+
+            },
+            error: function () {
+                alert('Error fetching data.');
+            }
+        });
+    }
+
+        function reset() {
+        $.ajax({
+            type: 'POST',
+            url: '/Home/Reset',
+            success: function (data) {
+                $('#responseDiv').html('');
+                $('#inputString').val('') ;
+            },
+            error: function () {
+                alert('Error fetching data.');
+            }
+        });
+    }
+</script>
+
+
